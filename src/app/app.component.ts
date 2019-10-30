@@ -6,18 +6,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  choice = 0;
   title = 'chart';
+  apiUrlValue = '';
+  chartTypeValue = '';
+  isClick = false;
 
-  line() {
-    this.choice = 1;
-  }
-
-  bar() {
-    this.choice = 2;
-  }
-
-  pie() {
-    this.choice = 3;
+  getInfo(apiUrl: string, chartType: string) {
+    this.isClick = true;
+    this.apiUrlValue = apiUrl;
+    this.chartTypeValue = chartType;
+    // console.log(this.apiUrl + ' ' + this.chartType);
   }
 }

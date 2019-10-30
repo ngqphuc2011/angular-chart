@@ -1,6 +1,15 @@
-<button (click)="line()">Line</button>
-<button (click)="bar()">Bar</button>
-<button (click)="pie()">Pie</button>
-<app-line-chart *ngIf="choice === 1"></app-line-chart>
-<app-bar-chart *ngIf="choice === 2"></app-bar-chart>
-<app-pie-chart *ngIf="choice === 3"></app-pie-chart>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<div>
+	<label>API URL </label>
+	<input type="text" #apiUrl placeholder="Enter API URL" name="apiUrl" required>
+</div>
+<div>
+  <label>Chart Type </label>
+  <select name="chartType" #chartType>
+	<option value="line">Line Chart</option>
+	<option value="bar">Bar Chart</option>
+  </select>
+</div>
+<button (click)="getInfo(apiUrl.value, chartType.value)">Submit</button>
+<app-line-chart *ngIf="isClick" [apiUrl]="apiUrlValue" [chartType]="chartTypeValue"></app-line-chart>
+<!-- <app-bar-chart [apiUrl]="apiUrlValue"></app-bar-chart> -->

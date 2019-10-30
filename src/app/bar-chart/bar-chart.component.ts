@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import * as pluginDataLabels from 'chartjs-plugin-datalabels';
 import { Label } from 'ng2-charts';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-bar-chart',
@@ -9,51 +10,47 @@ import { Label } from 'ng2-charts';
   styleUrls: ['./bar-chart.component.css'],
 })
 export class BarChartComponent implements OnInit {
+  @Input() apiUrl: string;
+  @Input() chartType: string;
+
+  public minTempData = [];
+  public maxTempData = [];
+
   public barChartOptions: ChartOptions = {
-    responsive: true,
-    // We use these empty structures as placeholders for dynamic theming.
-    scales: { xAxes: [{}], yAxes: [{}] },
-    plugins: {
-      datalabels: {
-        anchor: 'end',
-        align: 'end',
-      }
-    }
+    responsive: true
   };
-  public barChartLabels: Label[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+  public barChartLabels: Label[] = [''];
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
   public barChartPlugins = [pluginDataLabels];
 
   public barChartData: ChartDataSets[] = [
-    { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-    { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' }
+    { data: [], label: '' }
   ];
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.apiUrl != '') {
+      this.getData();
+    }
+  }
 
   ngOnInit() {
   }
 
-  // events
-  public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    console.log(event, active);
-  }
+  getData() {
+    // console.log(this.apiUrl);
+    this.barChartLabels = [];
 
-  public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
-    console.log(event, active);
-  }
-
-  public randomize(): void {
-    // Only Change 3 values
-    const data = [
-      Math.round(Math.random() * 100),
-      59,
-      80,
-      (Math.random() * 100),
-      56,
-      (Math.random() * 100),
-      40];
-    this.barChartData[0].data = data;
+    this.http.get(this.apiUrl).subscribe((result: any) => {
+      console.log(result.data);
+      for (let index = 0; index < result.data.length; index++) {
+        this.barChartLabels.push(result.data[index].month);
+        this.minTempData.push(result.data[index].temperature_min);
+        this.maxTempData.push(result.data[index].temperature_max);
+      }
+      this.barChartData = [{ data: this.minTempData, label: 'Min Temp' }, { data: this.maxTempData, label: 'Max Temp' }];
+    });
   }
 }
