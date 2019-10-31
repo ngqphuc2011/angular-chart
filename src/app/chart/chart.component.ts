@@ -1,30 +1,30 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter, SimpleChanges, OnChanges, DoCheck, AfterViewInit, AfterContentInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, BaseChartDirective, Label } from 'ng2-charts';
 import * as pluginAnnotations from 'chartjs-plugin-annotation';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-line-chart',
-  templateUrl: './line-chart.component.html',
-  styleUrls: ['./line-chart.component.css']
+  selector: 'app-chart',
+  templateUrl: './chart.component.html',
+  styleUrls: ['./chart.component.css']
 })
-export class LineChartComponent implements OnInit {
+export class ChartComponent implements OnInit, OnChanges {
   @Input() apiUrl: string;
   @Input() chartType: string;
 
   public minTempData = [];
   public maxTempData = [];
 
-  public lineChartData: ChartDataSets[] = [
+  public chartData: ChartDataSets[] = [
     { data: [], label: '' }
   ];
-  public lineChartLabels: Label[] = [''];
-  public lineChartOptions: (ChartOptions) = {
+  public chartLabels: Label[] = [''];
+  public chartOptions: (ChartOptions) = {
     responsive: true
   };
 
-  public lineChartColors: Color[] = [
+  public chartColors: Color[] = [
     { // grey
       backgroundColor: 'rgba(148,159,177,0.2)',
       borderColor: 'rgba(148,159,177,1)',
@@ -50,32 +50,37 @@ export class LineChartComponent implements OnInit {
       pointHoverBorderColor: 'rgba(148,159,177,0.8)'
     }
   ];
-  public lineChartLegend = true;
-  public lineChartPlugins = [pluginAnnotations];
-  public lineChartType: ChartType = 'line';
+  public chartLegend = true;
+  public chartPlugins = [pluginAnnotations];
 
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
   constructor(private http: HttpClient) { }
+  ngOnInit() {
+  }
 
-  ngOnChanges(changes: SimpleChanges) { 
+  ngOnChanges(changes: SimpleChanges) {
+
     if (this.apiUrl != '') {
+      // console.log(this.apiUrl);
+      // console.log(this.chartType);
+      this.chartData = [];
       this.getData();
     }
   }
-  ngOnInit() {
-   
-  }
+
 
   getData() {
-    this.lineChartLabels = [];
+    this.chartLabels = [];
     this.http.get(this.apiUrl).subscribe((result: any) => {
       for (let index = 0; index < result.data.length; index++) {
-        this.lineChartLabels.push(result.data[index].month);
+        this.chartLabels.push(result.data[index].month);
         this.minTempData.push(result.data[index].temperature_min);
         this.maxTempData.push(result.data[index].temperature_max);
       }
-      this.lineChartData = [{ data: this.minTempData, label: 'Min Temp' }, { data: this.maxTempData, label: 'Max Temp' }];      
+      this.chartData = [{ data: this.minTempData, label: 'Min Temp' }, { data: this.maxTempData, label: 'Max Temp' }];
+      console.log(result.data);
+
     });
   }
 

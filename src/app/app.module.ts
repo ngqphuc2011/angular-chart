@@ -7,13 +7,15 @@ import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { PieChartComponent } from './pie-chart/pie-chart.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { ChartComponent } from './chart/chart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LineChartComponent,
     BarChartComponent,
-    PieChartComponent
+    PieChartComponent,
+    ChartComponent
   ],
   imports: [
     BrowserModule,

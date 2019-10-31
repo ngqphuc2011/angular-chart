@@ -30,7 +30,7 @@ export class BarChartComponent implements OnInit {
 
   constructor(private http: HttpClient) { }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges) { 
     if (this.apiUrl != '') {
       this.getData();
     }
@@ -40,11 +40,8 @@ export class BarChartComponent implements OnInit {
   }
 
   getData() {
-    // console.log(this.apiUrl);
     this.barChartLabels = [];
-
     this.http.get(this.apiUrl).subscribe((result: any) => {
-      console.log(result.data);
       for (let index = 0; index < result.data.length; index++) {
         this.barChartLabels.push(result.data[index].month);
         this.minTempData.push(result.data[index].temperature_min);
