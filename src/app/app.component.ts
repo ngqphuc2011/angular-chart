@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ChartComponent } from './chart/chart.component';
 
 @Component({
@@ -9,17 +9,17 @@ import { ChartComponent } from './chart/chart.component';
 
 export class AppComponent {
   title = 'chart';
+  @ViewChild(ChartComponent, { static: true }) chart: ChartComponent;
 
   apiUrlValue = '';
   chartTypeValue = '';
   isClick = false;
-  
+
   getInfo(apiUrl: string, chartType: string) {
     this.isClick = true;
     this.apiUrlValue = apiUrl;
     this.chartTypeValue = chartType;
-
-    
     // console.log(this.apiUrl + ' ' + this.chartType);
   }
+
 }

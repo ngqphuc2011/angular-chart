@@ -9,7 +9,11 @@
   <select name="chartType" #chartType>
     <option value="line">Line Chart</option>
     <option value="bar">Bar Chart</option>
+    <option value="pie">Pie Chart</option>
   </select>
+</div>
+<div>
+  <label>Data</label>
 </div>
 
 <button (click)="getInfo(apiUrl.value, chartType.value)">Submit</button>

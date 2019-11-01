@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter, SimpleChanges, OnChanges, DoCheck, AfterViewInit, AfterContentInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, BaseChartDirective, Label } from 'ng2-charts';
 import { HttpClient } from '@angular/common/http';
@@ -94,9 +94,11 @@ export class ChartComponent implements OnInit, OnChanges {
         // get value by index
         const value = chart.data.datasets[activePoints[0]._datasetIndex].data[clickedElementIndex];
         console.log(clickedElementIndex, label, value);
+
         // console.log(activePoints);
         // console.log(e);
       }
     }
   }
+
 }
