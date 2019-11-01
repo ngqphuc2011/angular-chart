@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter, SimpleChanges, OnChanges, DoCheck, AfterViewInit, AfterContentInit } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color, BaseChartDirective, Label } from 'ng2-charts';
-import * as pluginAnnotations from 'chartjs-plugin-annotation';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -13,15 +12,16 @@ export class ChartComponent implements OnInit, OnChanges {
   @Input() apiUrl: string;
   @Input() chartType: string;
 
-  public minTempData = [];
-  public maxTempData = [];
+  public chartFigure0 = [];
+  public chartFigure1 = [];
+  public chartFigure2 = [];
 
   public chartData: ChartDataSets[] = [
     { data: [], label: '' }
   ];
   public chartLabels: Label[] = [''];
   public chartOptions: (ChartOptions) = {
-    responsive: true
+    responsive: false
   };
 
   public chartColors: Color[] = [
@@ -50,8 +50,6 @@ export class ChartComponent implements OnInit, OnChanges {
       pointHoverBorderColor: 'rgba(148,159,177,0.8)'
     }
   ];
-  public chartLegend = true;
-  public chartPlugins = [pluginAnnotations];
 
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
@@ -60,7 +58,6 @@ export class ChartComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-
     if (this.apiUrl != '') {
       // console.log(this.apiUrl);
       // console.log(this.chartType);
@@ -75,13 +72,31 @@ export class ChartComponent implements OnInit, OnChanges {
     this.http.get(this.apiUrl).subscribe((result: any) => {
       for (let index = 0; index < result.data.length; index++) {
         this.chartLabels.push(result.data[index].month);
-        this.minTempData.push(result.data[index].temperature_min);
-        this.maxTempData.push(result.data[index].temperature_max);
+        this.chartFigure0.push(result.data[index].temperature_min);
+        this.chartFigure1.push(result.data[index].temperature_max);
+        this.chartFigure2.push(result.data[index].temperature_mean);
       }
-      this.chartData = [{ data: this.minTempData, label: 'Min Temp' }, { data: this.maxTempData, label: 'Max Temp' }];
-      console.log(result.data);
+      this.chartData = [{ data: this.chartFigure0, label: 'Min Temp' }, { data: this.chartFigure1, label: 'Max Temp' }, { data: this.chartFigure2, label: 'Mean Temp' }];
+      // console.log(result.data);
 
     });
   }
 
+
+  public chartClicked(e: any): void {
+    if (e.active.length > 0) {
+      const chart = e.active[0]._chart;
+      const activePoints = chart.getElementAtEvent(e.event);
+      if (activePoints.length > 0) {
+        // get the internal index of slice in pie chart
+        const clickedElementIndex = activePoints[0]._index;
+        const label = chart.data.labels[clickedElementIndex];
+        // get value by index
+        const value = chart.data.datasets[activePoints[0]._datasetIndex].data[clickedElementIndex];
+        console.log(clickedElementIndex, label, value);
+        // console.log(activePoints);
+        // console.log(e);
+      }
+    }
+  }
 }

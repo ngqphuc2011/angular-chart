@@ -13,9 +13,6 @@
 </div>
 
 <button (click)="getInfo(apiUrl.value, chartType.value)">Submit</button>
-<div>
-  <app-chart *ngIf="isClick" [chartType]="chartTypeValue" [apiUrl]="apiUrlValue"></app-chart>
+<div *ngIf="isClick">
+  <app-chart [chartType]="chartTypeValue" [apiUrl]="apiUrlValue"></app-chart>
 </div>
-
-<!-- <app-line-chart *ngIf="isClick && chartTypeValue === 'line'" [apiUrl]="apiUrlValue" [chartType]="chartTypeValue"></app-line-chart>    -->
-<!-- <app-bar-chart *ngIf="isClick && chartTypeValue === 'bar'" [apiUrl]="apiUrlValue" [chartType]="chartTypeValue"></app-bar-chart> -->

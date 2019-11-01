@@ -1,10 +1,8 @@
 <div class="flex">
-    <div class="flex-item">
-      <div style="display: block;">
-        <canvas *ngIf="chartData.length" baseChart [datasets]="chartData" [labels]="chartLabels"
-          [options]="chartOptions" [colors]="chartColors" [legend]="chartLegend" [chartType]="chartType"
-          [plugins]="chartPlugins"></canvas>
-      </div>
+  <div class="flex-item">
+    <div style="display: block;">
+      <canvas *ngIf="chartData.length" baseChart width="800" height="450" [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions"
+        [colors]="chartColors" [chartType]="chartType" (chartClick)="chartClicked($event)"></canvas>
     </div>
   </div>
-  
+</div>
